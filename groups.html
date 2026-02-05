@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المجموعات - مبادرة زات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', system-ui, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            border-left: 1px solid #e5e7eb;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo p {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .nav-menu {
+            padding: 0 10px;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            margin: 5px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .main-content {
+            margin-right: 280px;
+            width: calc(100% - 280px);
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1f2937;
+            font-size: 1.8rem;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #6b7280;
+        }
+        
+        .breadcrumb a {
+            color: #d32f2f;
+            text-decoration: none;
+        }
+        
+        .breadcrumb i {
+            color: #9ca3af;
+        }
+        
+        .btn {
+            background: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #b71c1c;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d32f2f;
+            color: #d32f2f;
+        }
+        
+        .btn-outline:hover {
+            background: #d32f2f;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            color: #d32f2f;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .groups-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .group-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .group-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #d32f2f;
+        }
+        
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .group-info {
+            flex: 1;
+        }
+        
+        .group-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .instructor-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            color: #6b7280;
+        }
+        
+        .capacity-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6b7280;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #10b981;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.8rem;
+            color: #6b7280;
+            text-align: left;
+        }
+        
+        .actions {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background: #d32f2f;
+            color: white;
+        }
+        
+        .group-students {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        .group-students h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+        
+        .student-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #f9fafb;
+        }
+        
+        .student-name {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        
+        .student-phone {
+            font-size: 0.8rem;
+            color: #6b7280;
+            direction: ltr;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-menu.active {
+                display: block;
+            }
+            
+            .main-content {
+                margin-right: 0;
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i> القائمة
+    </div>
+    
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-rocket"></i> مبادرة زات</h1>
+            <p>ZAT Initiative</p>
+        </div>
+        
+        <div class="nav-menu" id="navMenu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                لوحة التحكم
+            </a>
+            <a href="courses.html" class="nav-item active">
+                <i class="fas fa-book-open"></i>
+                الكورسات
+            </a>
+            <a href="students.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                الطلاب
+            </a>
+            <a href="sessions.html" class="nav-item">
+                <i class="fas fa-calendar"></i>
+                الجلسات
+            </a>
+            <a href="index.html" class="nav-item" style="color: #ef4444; margin-top: 20px;">
+                <i class="fas fa-sign-out-alt"></i>
+                تسجيل الخروج
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a href="dashboard.html">الرئيسية</a>
+            <i class="fas fa-chevron-left"></i>
+            <a href="courses.html">الكورسات</a>
+            <i class="fas fa-chevron-left"></i>
+            <span>مجموعات اللغة الإنجليزية</span>
+        </div>
+        
+        <div class="header">
+            <h1>مجموعات اللغة الإنجليزية</h1>
+            <button class="btn" onclick="showAddGroupModal()">
+                <i class="fas fa-plus"></i> إضافة مجموعة
+            </button>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>3</h3>
+                <p>إجمالي المجموعات</p>
+            </div>
+            <div class="stat-card">
+                <h3>45</h3>
+                <p>إجمالي الطلاب</p>
+            </div>
+            <div class="stat-card">
+                <h3>12</h3>
+                <p>الجلسات</p>
+            </div>
+            <div class="stat-card">
+                <h3>85%</h3>
+                <p>معدل الحضور</p>
+            </div>
+        </div>
+        
+        <div class="groups-grid">
+            <div class="group-card">
+                <div class="actions">
+                    <button class="action-btn" onclick="showEditGroupModal(1)" title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn" onclick="deleteGroup(1)" title="حذف">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                
+                <div class="group-header">
+                    <div class="group-info">
+                        <div class="group-name">مجموعة 1</div>
+                        <div class="instructor-info">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>أحمد محمد</span>
+                        </div>
+                        <div class="capacity-info">
+                            <i class="fas fa-users"></i>
+                            <span>15 / 20 طالب</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 75%;"></div>
+                </div>
+                <div class="progress-text">75% من السعة</div>
+                
+                <div class="group-students">
+                    <h4>الطلاب (<span id="studentCount1">15</span>)</h4>
+                    <div class="student-list" id="studentList1">
+                        <div class="student-item">
+                            <span class="student-name">أحمد محمد</span>
+                            <span class="student-phone">01234567890</span>
+                        </div>
+                        <div class="student-item">
+                            <span class="student-name">فاطمة علي</span>
+                            <span class="student-phone">01234567891</span>
+                        </div>
+                        <div class="student-item">
+                            <span class="student-name">محمد خالد</span>
+                            <span class="student-phone">01234567892</span>
+                        </div>
+                        <div class="student-item">
+                            <span class="student-name">نور أحمد</span>
+                            <span class="student-phone">01234567893</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" onclick="showStudentsModal(1)" style="margin-top: 10px; padding: 5px 10px; font-size: 0.8rem;">
+                        <i class="fas fa-users"></i> عرض جميع الطلاب
+                    </button>
+                </div>
+            </div>
+            
+            <div class="group-card">
+                <div class="actions">
+                    <button class="action-btn" onclick="showEditGroupModal(2)" title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn" onclick="deleteGroup(2)" title="حذف">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                
+                <div class="group-header">
+                    <div class="group-info">
+                        <div class="group-name">مجموعة 2</div>
+                        <div class="instructor-info">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>فاطمة سعيد</span>
+                        </div>
+                        <div class="capacity-info">
+                            <i class="fas fa-users"></i>
+                            <span>18 / 20 طالب</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 90%;"></div>
+                </div>
+                <div class="progress-text">90% من السعة</div>
+                
+                <div class="group-students">
+                    <h4>الطلاب (<span id="studentCount2">18</span>)</h4>
+                    <div class="student-list" id="studentList2">
+                        <div class="student-item">
+                            <span class="student-name">سارة محمد</span>
+                            <span class="student-phone">01234567894</span>
+                        </div>
+                        <div class="student-item">
+                            <span class="student-name">علي أحمد</span>
+                            <span class="student-phone">01234567895</span>
+                        </div>
+                        <div class="student-item">
+                            <span class="student-name">منى خالد</span>
+                            <span class="student-phone">01234567896</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" onclick="showStudentsModal(2)" style="margin-top: 10px; padding: 5px 10px; font-size: 0.8rem;">
+                        <i class="fas fa-users"></i> عرض جميع الطلاب
+                    </button>
+                </div>
+            </div>
+            
+            <div class="group-card">
+                <div class="actions">
+                    <button class="action-btn" onclick="showEditGroupModal(3)" title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn" onclick="deleteGroup(3)" title="حذف">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                
+                <div class="group-header">
+                    <div class="group-info">
+                        <div class="group-name">مجموعة 3</div>
+                        <div class="instructor-info">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>خالد حسن</span>
+                        </div>
+                        <div class="capacity-info">
+                            <i class="fas fa-users"></i>
+                            <span>12 / 15 طالب</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 80%;"></div>
+                </div>
+                <div class="progress-text">80% من السعة</div>
+                
+                <div class="group-students">
+                    <h4>الطلاب (<span id="studentCount3">12</span>)</h4>
+                    <div class="student-list" id="studentList3">
+                        <div class="student-item">
+                            <span class="student-name">رنا محمد</span>
+                            <span class="student-phone">01234567897</span>
+                        </div>
+                        <div class="student-item">
+                            <span class="student-name">محمود علي</span>
+                            <span class="student-phone">01234567898</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" onclick="showStudentsModal(3)" style="margin-top: 10px; padding: 5px 10px; font-size: 0.8rem;">
+                        <i class="fas fa-users"></i> عرض جميع الطلاب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Group Modal -->
+    <div id="groupModal" class="modal" style="display: none; position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; position: relative;">
+            <h2 id="groupModalTitle" style="margin-bottom: 20px; color: #1f2937;">إضافة مجموعة جديدة</h2>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">اسم المجموعة *</label>
+                <input type="text" id="groupName" placeholder="مثال: مجموعة 1" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">اسم المدرب</label>
+                <input type="text" id="instructorName" placeholder="اسم المدرب المسؤول" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">الحد الأقصى للطلاب (اختياري)</label>
+                <input type="number" id="maxCapacity" placeholder="20" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="saveGroup()" style="flex: 1;">حفظ المجموعة</button>
+                <button class="btn btn-outline" onclick="closeGroupModal()" style="flex: 1;">إلغاء</button>
+            </div>
+            
+            <button onclick="closeGroupModal()" style="position: absolute; left: 15px; top: 15px; background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">×</button>
+        </div>
+    </div>
+    
+    <!-- Students Modal -->
+    <div id="studentsModal" class="modal" style="display: none; position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 600px; position: relative;">
+            <h2 style="margin-bottom: 20px; color: #1f2937;">طلاب المجموعة</h2>
+            
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f9fafb;">
+                            <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb;">الاسم</th>
+                            <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb;">رقم الهاتف</th>
+                            <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb;">الحضور</th>
+                            <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb;">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalStudentsTable">
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;">أحمد محمد</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;" dir="ltr">01234567890</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;">
+                                <span style="color: #10b981;"><i class="fas fa-check-circle"></i> 12/15</span>
+                            </td>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;">
+                                <button class="action-btn" style="background: #f3f4f6; color: #374151; margin-right: 5px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" style="background: #fee2e2; color: #dc2626;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;">فاطمة علي</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;" dir="ltr">01234567891</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;">
+                                <span style="color: #10b981;"><i class="fas fa-check-circle"></i> 14/15</span>
+                            </td>
+                            <td style="padding: 10px; border-bottom: 1px solid #f3f4f6;">
+                                <button class="action-btn" style="background: #f3f4f6; color: #374151; margin-right: 5px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" style="background: #fee2e2; color: #dc2626;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-outline" onclick="closeStudentsModal()" style="flex: 1;">إغلاق</button>
+                <button class="btn" onclick="exportGroupStudents()" style="flex: 1;">
+                    <i class="fas fa-file-excel"></i> تصدير
+                </button>
+            </div>
+            
+            <button onclick="closeStudentsModal()" style="position: absolute; left: 15px; top: 15px; background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">×</button>
+        </div>
+    </div>
+    
+    <script>
+        let editingGroupId = null;
+        
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+        
+        function showAddGroupModal() {
+            document.getElementById('groupModalTitle').textContent = 'إضافة مجموعة جديدة';
+            document.getElementById('groupName').value = '';
+            document.getElementById('instructorName').value = '';
+            document.getElementById('maxCapacity').value = '';
+            editingGroupId = null;
+            document.getElementById('groupModal').style.display = 'flex';
+        }
+        
+        function showEditGroupModal(groupId) {
+            document.getElementById('groupModalTitle').textContent = 'تعديل المجموعة';
+            // In a real app, this would populate with group data
+            document.getElementById('groupName').value = 'مجموعة 1';
+            document.getElementById('instructorName').value = 'أحمد محمد';
+            document.getElementById('maxCapacity').value = '20';
+            editingGroupId = groupId;
+            document.getElementById('groupModal').style.display = 'flex';
+        }
+        
+        function closeGroupModal() {
+            document.getElementById('groupModal').style.display = 'none';
+        }
+        
+        function closeStudentsModal() {
+            document.getElementById('studentsModal').style.display = 'none';
+        }
+        
+        function saveGroup() {
+            const name = document.getElementById('groupName').value;
+            if (!name) {
+                alert('الرجاء إدخال اسم المجموعة');
+                return;
+            }
+            
+            alert(editingGroupId ? 'تم تحديث المجموعة!' : 'تم إضافة المجموعة!');
+            closeGroupModal();
+        }
+        
+        function deleteGroup(groupId) {
+            if (confirm('هل أنت متأكد من حذف هذه المجموعة؟')) {
+                alert('تم حذف المجموعة!');
+            }
+        }
+        
+        function showStudentsModal(groupId) {
+            document.getElementById('studentsModal').style.display = 'flex';
+        }
+        
+        function exportGroupStudents() {
+            alert('جاري تصدير بيانات الطلاب...');
+        }
+        
+        // Highlight active nav item
+        const currentPath = window.location.pathname.split('/').pop();
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            if (item.getAttribute('href') === currentPath) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,8 +1,20 @@
 {
   "name": "zat-academy",
-  "private": true,
   "version": "1.0.0",
+  "private": true,
+  "description": "system",
+  "homepage": "https://github.com/Sdhu567383355/SYSTEM#readme",
+  "bugs": {
+    "url": "https://github.com/Sdhu567383355/SYSTEM/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sdhu567383355/SYSTEM.git"
+  },
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

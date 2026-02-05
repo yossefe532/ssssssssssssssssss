@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الطلاب - مبادرة زات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', system-ui, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            border-left: 1px solid #e5e7eb;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo p {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .nav-menu {
+            padding: 0 10px;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            margin: 5px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .main-content {
+            margin-right: 280px;
+            width: calc(100% - 280px);
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1f2937;
+            font-size: 1.8rem;
+        }
+        
+        .btn {
+            background: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #b71c1c;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d32f2f;
+            color: #d32f2f;
+        }
+        
+        .btn-outline:hover {
+            background: #d32f2f;
+            color: white;
+        }
+        
+        .filters {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-box input {
+            padding-right: 40px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+        
+        .students-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        tr:hover {
+            background: #fef2f2;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-old {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .payment-status {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .payment-status i {
+            font-size: 0.9rem;
+        }
+        
+        .payment-paid {
+            color: #10b981;
+        }
+        
+        .payment-unpaid {
+            color: #ef4444;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .edit-btn {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .edit-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-menu.active {
+                display: block;
+            }
+            
+            .main-content {
+                margin-right: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .students-table {
+                overflow-x: auto;
+            }
+            
+            table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i> القائمة
+    </div>
+    
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-rocket"></i> مبادرة زات</h1>
+            <p>ZAT Initiative</p>
+        </div>
+        
+        <div class="nav-menu" id="navMenu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                لوحة التحكم
+            </a>
+            <a href="courses.html" class="nav-item">
+                <i class="fas fa-book-open"></i>
+                الكورسات
+            </a>
+            <a href="students.html" class="nav-item active">
+                <i class="fas fa-users"></i>
+                الطلاب
+            </a>
+            <a href="sessions.html" class="nav-item">
+                <i class="fas fa-calendar"></i>
+                الجلسات
+            </a>
+            <a href="index.html" class="nav-item" style="color: #ef4444; margin-top: 20px;">
+                <i class="fas fa-sign-out-alt"></i>
+                تسجيل الخروج
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1>الطلاب</h1>
+            <button class="btn" onclick="showAddStudentModal()">
+                <i class="fas fa-plus"></i> إضافة طالب
+            </button>
+        </div>
+        
+        <div class="filters">
+            <div class="search-box">
+                <input type="text" placeholder="بحث بالاسم أو رقم الهاتف..." onkeyup="searchStudents()">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="filter-group">
+                <label>الكورس</label>
+                <select onchange="filterStudents()">
+                    <option value="">جميع الكورسات</option>
+                    <option value="english">اللغة الإنجليزية</option>
+                    <option value="german">اللغة الألمانية</option>
+                    <option value="icdl">ICDL</option>
+                    <option value="photoshop">فوتوشوب</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>المجموعة</label>
+                <select onchange="filterStudents()">
+                    <option value="">جميع المجموعات</option>
+                    <option value="group1">مجموعة 1</option>
+                    <option value="group2">مجموعة 2</option>
+                    <option value="group3">مجموعة 3</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>حالة الدفع</label>
+                <select onchange="filterStudents()">
+                    <option value="">جميع الحالات</option>
+                    <option value="paid">مدفوع</option>
+                    <option value="unpaid">غير مدفوع</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="students-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>رقم الهاتف</th>
+                        <th>النوع</th>
+                        <th>الكورس</th>
+                        <th>المجموعة</th>
+                        <th>رسوم الشهادة</th>
+                        <th>القسط الأول</th>
+                        <th>القسط الثاني</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTableBody">
+                    <tr>
+                        <td>أحمد محمد</td>
+                        <td dir="ltr">01234567890</td>
+                        <td><span class="status-badge status-new">جديد</span></td>
+                        <td>اللغة الإنجليزية</td>
+                        <td>مجموعة 1</td>
+                        <td class="payment-status"><i class="fas fa-check-circle payment-paid"></i></td>
+                        <td class="payment-status"><i class="fas fa-times-circle payment-unpaid"></i></td>
+                        <td class="payment-status"><i class="fas fa-times-circle payment-unpaid"></i></td>
+                        <td class="actions">
+                            <button class="action-btn edit-btn" onclick="showEditStudentModal(1)">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteStudent(1)">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>فاطمة علي</td>
+                        <td dir="ltr">01234567891</td>
+                        <td><span class="status-badge status-old">قديم</span></td>
+                        <td>البرمجة</td>
+                        <td>مجموعة 2</td>
+                        <td class="payment-status"><i class="fas fa-check-circle payment-paid"></i></td>
+                        <td class="payment-status"><i class="fas fa-check-circle payment-paid"></i></td>
+                        <td class="payment-status"><i class="fas fa-times-circle payment-unpaid"></i></td>
+                        <td class="actions">
+                            <button class="action-btn edit-btn" onclick="showEditStudentModal(2)">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteStudent(2)">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>محمد خالد</td>
+                        <td dir="ltr">01234567892</td>
+                        <td><span class="status-badge status-new">جديد</span></td>
+                        <td>فوتوشوب</td>
+                        <td>مجموعة 1</td>
+                        <td class="payment-status"><i class="fas fa-times-circle payment-unpaid"></i></td>
+                        <td class="payment-status"><i class="fas fa-times-circle payment-unpaid"></i></td>
+                        <td class="payment-status"><i class="fas fa-times-circle payment-unpaid"></i></td>
+                        <td class="actions">
+                            <button class="action-btn edit-btn" onclick="showEditStudentModal(3)">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteStudent(3)">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>نور أحمد</td>
+                        <td dir="ltr">01234567893</td>
+                        <td><span class="status-badge status-old">قديم</span></td>
+                        <td>الذكاء الاصطناعي</td>
+                        <td>مجموعة 3</td>
+                        <td class="payment-status"><i class="fas fa-check-circle payment-paid"></i></td>
+                        <td class="payment-status"><i class="fas fa-check-circle payment-paid"></i></td>
+                        <td class="payment-status"><i class="fas fa-check-circle payment-paid"></i></td>
+                        <td class="actions">
+                            <button class="action-btn edit-btn" onclick="showEditStudentModal(4)">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteStudent(4)">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Student Modal -->
+    <div id="studentModal" class="modal" style="display: none; position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 600px; position: relative;">
+            <h2 id="studentModalTitle" style="margin-bottom: 20px; color: #1f2937;">إضافة طالب جديد</h2>
+            
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">الاسم الكامل *</label>
+                    <input type="text" id="studentName" placeholder="أدخل اسم الطالب" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">رقم الهاتف *</label>
+                    <input type="tel" id="studentPhone" placeholder="01234567890" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+                </div>
+            </div>
+            
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">الكورس</label>
+                    <select id="studentCourse" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+                        <option value="">اختر الكورس</option>
+                        <option value="english">اللغة الإنجليزية</option>
+                        <option value="german">اللغة الألمانية</option>
+                        <option value="icdl">ICDL</option>
+                        <option value="photoshop">فوتوشوب</option>
+                        <option value="ai">الذكاء الاصطناعي</option>
+                        <option value="programming">البرمجة</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">المجموعة</label>
+                    <select id="studentGroup" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+                        <option value="">اختر المجموعة</option>
+                        <option value="group1">مجموعة 1</option>
+                        <option value="group2">مجموعة 2</option>
+                        <option value="group3">مجموعة 3</option>
+                        <option value="group4">مجموعة 4</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">نوع الطالب</label>
+                <div style="display: flex; gap: 20px;">
+                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="radio" name="studentType" value="new" checked> جديد
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="radio" name="studentType" value="old"> قديم
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">حالة الدفع</label>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="certificatePaid"> رسوم الشهادة
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="firstInstallment"> القسط الأول
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="secondInstallment"> القسط الثاني
+                    </label>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="saveStudent()" style="flex: 1;">حفظ الطالب</button>
+                <button class="btn btn-outline" onclick="closeStudentModal()" style="flex: 1;">إلغاء</button>
+            </div>
+            
+            <button onclick="closeStudentModal()" style="position: absolute; left: 15px; top: 15px; background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">×</button>
+        </div>
+    </div>
+    
+    <script>
+        let editingStudentId = null;
+        
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+        
+        function showAddStudentModal() {
+            document.getElementById('studentModalTitle').textContent = 'إضافة طالب جديد';
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentPhone').value = '';
+            document.getElementById('studentCourse').value = '';
+            document.getElementById('studentGroup').value = '';
+            document.getElementById('certificatePaid').checked = false;
+            document.getElementById('firstInstallment').checked = false;
+            document.getElementById('secondInstallment').checked = false;
+            document.querySelector('input[name="studentType"][value="new"]').checked = true;
+            editingStudentId = null;
+            document.getElementById('studentModal').style.display = 'flex';
+        }
+        
+        function showEditStudentModal(studentId) {
+            document.getElementById('studentModalTitle').textContent = 'تعديل بيانات الطالب';
+            // In a real app, this would populate with student data
+            document.getElementById('studentName').value = 'اسم الطالب';
+            document.getElementById('studentPhone').value = '01234567890';
+            document.getElementById('studentCourse').value = 'english';
+            document.getElementById('studentGroup').value = 'group1';
+            editingStudentId = studentId;
+            document.getElementById('studentModal').style.display = 'flex';
+        }
+        
+        function closeStudentModal() {
+            document.getElementById('studentModal').style.display = 'none';
+        }
+        
+        function saveStudent() {
+            const name = document.getElementById('studentName').value;
+            const phone = document.getElementById('studentPhone').value;
+            
+            if (!name || !phone) {
+                alert('الرجاء إدخال الاسم ورقم الهاتف');
+                return;
+            }
+            
+            alert(editingStudentId ? 'تم تحديث بيانات الطالب!' : 'تم إضافة الطالب!');
+            closeStudentModal();
+        }
+        
+        function deleteStudent(studentId) {
+            if (confirm('هل أنت متأكد من حذف هذا الطالب؟')) {
+                alert('تم حذف الطالب!');
+            }
+        }
+        
+        function searchStudents() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('studentsTableBody');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const txtValue = rows[i].textContent || rows[i].innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+        
+        function filterStudents() {
+            // In a real app, this would filter the table based on selections
+            console.log('Filtering students...');
+        }
+        
+        // Highlight active nav item
+        const currentPath = window.location.pathname.split('/').pop();
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            if (item.getAttribute('href') === currentPath) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

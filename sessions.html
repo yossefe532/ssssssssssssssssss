@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجلسات - مبادرة زات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', system-ui, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            border-left: 1px solid #e5e7eb;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo p {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .nav-menu {
+            padding: 0 10px;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            margin: 5px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .main-content {
+            margin-right: 280px;
+            width: calc(100% - 280px);
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1f2937;
+            font-size: 1.8rem;
+        }
+        
+        .btn {
+            background: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #b71c1c;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d32f2f;
+            color: #d32f2f;
+        }
+        
+        .btn-outline:hover {
+            background: #d32f2f;
+            color: white;
+        }
+        
+        .filters {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .sessions-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .session-group {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .group-header {
+            background: #f9fafb;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .group-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .group-icon {
+            width: 40px;
+            height: 40px;
+            background: #fee2e2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc2626;
+        }
+        
+        .group-details h3 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+        
+        .group-details p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .group-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .sessions-list {
+            padding: 10px 0;
+        }
+        
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .session-item:last-child {
+            border-bottom: none;
+        }
+        
+        .session-info h4 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+        
+        .session-info p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .session-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .attendance-count {
+            background: #dcfce7;
+            color: #166534;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .session-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .qr-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .qr-btn:hover {
+            background: #bfdbfe;
+        }
+        
+        .edit-btn {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .edit-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-menu.active {
+                display: block;
+            }
+            
+            .main-content {
+                margin-right: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .session-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .session-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .session-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i> القائمة
+    </div>
+    
+    <div class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-rocket"></i> مبادرة زات</h1>
+            <p>ZAT Initiative</p>
+        </div>
+        
+        <div class="nav-menu" id="navMenu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                لوحة التحكم
+            </a>
+            <a href="courses.html" class="nav-item">
+                <i class="fas fa-book-open"></i>
+                الكورسات
+            </a>
+            <a href="students.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                الطلاب
+            </a>
+            <a href="sessions.html" class="nav-item active">
+                <i class="fas fa-calendar"></i>
+                الجلسات
+            </a>
+            <a href="index.html" class="nav-item" style="color: #ef4444; margin-top: 20px;">
+                <i class="fas fa-sign-out-alt"></i>
+                تسجيل الخروج
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1>الجلسات</h1>
+            <button class="btn" onclick="showAddSessionModal()">
+                <i class="fas fa-plus"></i> إضافة جلسة
+            </button>
+        </div>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label>الكورس</label>
+                <select onchange="filterSessions()">
+                    <option value="">جميع الكورسات</option>
+                    <option value="english">اللغة الإنجليزية</option>
+                    <option value="german">اللغة الألمانية</option>
+                    <option value="icdl">ICDL</option>
+                    <option value="photoshop">فوتوشوب</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>المجموعة</label>
+                <select onchange="filterSessions()">
+                    <option value="">جميع المجموعات</option>
+                    <option value="group1">مجموعة 1</option>
+                    <option value="group2">مجموعة 2</option>
+                    <option value="group3">مجموعة 3</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="sessions-grid">
+            <div class="session-group">
+                <div class="group-header">
+                    <div class="group-info">
+                        <div class="group-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="group-details">
+                            <h3>مجموعة 1 - اللغة الإنجليزية</h3>
+                            <p>المدرب: أحمد محمد • 15 طالب</p>
+                        </div>
+                    </div>
+                    <div class="group-actions">
+                        <button class="btn btn-outline" onclick="exportGroupSessions('group1')">
+                            <i class="fas fa-file-excel"></i> تصدير
+                        </button>
+                        <button class="btn" onclick="showAddSessionModal()">
+                            <i class="fas fa-plus"></i> جلسة جديدة
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sessions-list">
+                    <div class="session-item">
+                        <div class="session-info">
+                            <h4>الجلسة 1</h4>
+                            <p>15 يناير 2026</p>
+                        </div>
+                        <div class="session-stats">
+                            <div class="attendance-count">12 / 15</div>
+                            <div class="session-actions">
+                                <button class="action-btn qr-btn" onclick="showQRCode(1)">
+                                    <i class="fas fa-qrcode"></i> QR
+                                </button>
+                                <button class="action-btn edit-btn" onclick="showEditSessionModal(1)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteSession(1)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="session-item">
+                        <div class="session-info">
+                            <h4>الجلسة 2</h4>
+                            <p>22 يناير 2026</p>
+                        </div>
+                        <div class="session-stats">
+                            <div class="attendance-count">14 / 15</div>
+                            <div class="session-actions">
+                                <button class="action-btn qr-btn" onclick="showQRCode(2)">
+                                    <i class="fas fa-qrcode"></i> QR
+                                </button>
+                                <button class="action-btn edit-btn" onclick="showEditSessionModal(2)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteSession(2)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="session-item">
+                        <div class="session-info">
+                            <h4>الجلسة 3</h4>
+                            <p>29 يناير 2026</p>
+                        </div>
+                        <div class="session-stats">
+                            <div class="attendance-count">13 / 15</div>
+                            <div class="session-actions">
+                                <button class="action-btn qr-btn" onclick="showQRCode(3)">
+                                    <i class="fas fa-qrcode"></i> QR
+                                </button>
+                                <button class="action-btn edit-btn" onclick="showEditSessionModal(3)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteSession(3)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="session-group">
+                <div class="group-header">
+                    <div class="group-info">
+                        <div class="group-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="group-details">
+                            <h3>مجموعة 2 - البرمجة</h3>
+                            <p>المدرب: فاطمة علي • 12 طالب</p>
+                        </div>
+                    </div>
+                    <div class="group-actions">
+                        <button class="btn btn-outline" onclick="exportGroupSessions('group2')">
+                            <i class="fas fa-file-excel"></i> تصدير
+                        </button>
+                        <button class="btn" onclick="showAddSessionModal()">
+                            <i class="fas fa-plus"></i> جلسة جديدة
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sessions-list">
+                    <div class="session-item">
+                        <div class="session-info">
+                            <h4>الجلسة 1</h4>
+                            <p>18 يناير 2026</p>
+                        </div>
+                        <div class="session-stats">
+                            <div class="attendance-count">10 / 12</div>
+                            <div class="session-actions">
+                                <button class="action-btn qr-btn" onclick="showQRCode(4)">
+                                    <i class="fas fa-qrcode"></i> QR
+                                </button>
+                                <button class="action-btn edit-btn" onclick="showEditSessionModal(4)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteSession(4)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="session-item">
+                        <div class="session-info">
+                            <h4>الجلسة 2</h4>
+                            <p>25 يناير 2026</p>
+                        </div>
+                        <div class="session-stats">
+                            <div class="attendance-count">11 / 12</div>
+                            <div class="session-actions">
+                                <button class="action-btn qr-btn" onclick="showQRCode(5)">
+                                    <i class="fas fa-qrcode"></i> QR
+                                </button>
+                                <button class="action-btn edit-btn" onclick="showEditSessionModal(5)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteSession(5)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Session Modal -->
+    <div id="sessionModal" class="modal" style="display: none; position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; position: relative;">
+            <h2 id="sessionModalTitle" style="margin-bottom: 20px; color: #1f2937;">إضافة جلسة جديدة</h2>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">الكورس</label>
+                <select id="sessionCourse" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+                    <option value="">اختر الكورس</option>
+                    <option value="english">اللغة الإنجليزية</option>
+                    <option value="german">اللغة الألمانية</option>
+                    <option value="icdl">ICDL</option>
+                    <option value="photoshop">فوتوشوب</option>
+                    <option value="ai">الذكاء الاصطناعي</option>
+                    <option value="programming">البرمجة</option>
+                </select>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">المجموعة</label>
+                <select id="sessionGroup" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+                    <option value="">اختر المجموعة</option>
+                    <option value="group1">مجموعة 1</option>
+                    <option value="group2">مجموعة 2</option>
+                    <option value="group3">مجموعة 3</option>
+                    <option value="group4">مجموعة 4</option>
+                </select>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">عنوان الجلسة *</label>
+                <input type="text" id="sessionTitle" placeholder="مثال: الجلسة 1" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">التاريخ *</label>
+                <input type="date" id="sessionDate" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 1rem;">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="saveSession()" style="flex: 1;">حفظ الجلسة</button>
+                <button class="btn btn-outline" onclick="closeSessionModal()" style="flex: 1;">إلغاء</button>
+            </div>
+            
+            <button onclick="closeSessionModal()" style="position: absolute; left: 15px; top: 15px; background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">×</button>
+        </div>
+    </div>
+    
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="modal" style="display: none; position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; position: relative; text-align: center;">
+            <h2 style="margin-bottom: 20px; color: #1f2937;">QR Code للجلسة</h2>
+            
+            <div style="background: white; padding: 20px; display: inline-block; border-radius: 10px; margin: 20px 0; border: 1px solid #e5e7eb;">
+                <!-- Simplified QR Code representation -->
+                <div style="width: 200px; height: 200px; background: white; display: grid; grid-template-columns: repeat(21, 1fr); grid-template-rows: repeat(21, 1fr); gap: 0; direction: ltr;">
+                    <!-- Position markers -->
+                    <div style="grid-column: 1; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 2; grid-row: 1; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 3; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 4; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 5; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 6; grid-row: 1; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 7; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 15; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 16; grid-row: 1; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 17; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 18; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 19; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 20; grid-row: 1; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 21; grid-row: 1; background: black; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 1; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 2; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 3; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 4; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 5; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 6; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 7; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 15; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 16; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 17; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 18; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 19; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 20; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 21; grid-row: 2; background: white; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 1; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 2; grid-row: 3; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 3; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 4; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 5; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 6; grid-row: 3; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 7; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 15; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 16; grid-row: 3; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 17; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 18; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 19; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 20; grid-row: 3; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 21; grid-row: 3; background: black; width: 8px; height: 8px;"></div>
+                    
+                    <!-- Additional QR code elements simplified -->
+                    <div style="grid-column: 1; grid-row: 15; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 2; grid-row: 15; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 3; grid-row: 15; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 4; grid-row: 15; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 5; grid-row: 15; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 6; grid-row: 15; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 7; grid-row: 15; background: black; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 1; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 2; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 3; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 4; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 5; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 6; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 7; grid-row: 16; background: white; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 1; grid-row: 17; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 2; grid-row: 17; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 3; grid-row: 17; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 4; grid-row: 17; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 5; grid-row: 17; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 6; grid-row: 17; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 7; grid-row: 17; background: black; width: 8px; height: 8px;"></div>
+                    
+                    <!-- Random data pattern -->
+                    <div style="grid-column: 9; grid-row: 9; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 10; grid-row: 9; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 11; grid-row: 9; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 12; grid-row: 9; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 13; grid-row: 9; background: black; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 9; grid-row: 10; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 10; grid-row: 10; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 11; grid-row: 10; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 12; grid-row: 10; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 13; grid-row: 10; background: white; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 9; grid-row: 11; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 10; grid-row: 11; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 11; grid-row: 11; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 12; grid-row: 11; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 13; grid-row: 11; background: black; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 9; grid-row: 12; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 10; grid-row: 12; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 11; grid-row: 12; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 12; grid-row: 12; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 13; grid-row: 12; background: white; width: 8px; height: 8px;"></div>
+                    
+                    <div style="grid-column: 9; grid-row: 13; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 10; grid-row: 13; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 11; grid-row: 13; background: black; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 12; grid-row: 13; background: white; width: 8px; height: 8px;"></div>
+                    <div style="grid-column: 13; grid-row: 13; background: black; width: 8px; height: 8px;"></div>
+                </div>
+            </div>
+            
+            <p style="margin: 15px 0; color: #6b7280;">امسح هذا الرمز لتسجيل الحضور</p>
+            <p style="margin: 5px 0; font-size: 0.9rem; color: #9ca3af; direction: ltr; text-align: center;">http://zat.org/attend/session-1</p>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-outline" onclick="closeQRModal()" style="flex: 1;">إغلاق</button>
+                <button class="btn" onclick="downloadQRCode()" style="flex: 1;">
+                    <i class="fas fa-download"></i> تحميل
+                </button>
+            </div>
+            
+            <button onclick="closeQRModal()" style="position: absolute; left: 15px; top: 15px; background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">×</button>
+        </div>
+    </div>
+    
+    <script>
+        let editingSessionId = null;
+        
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+        
+        function showAddSessionModal() {
+            document.getElementById('sessionModalTitle').textContent = 'إضافة جلسة جديدة';
+            document.getElementById('sessionCourse').value = '';
+            document.getElementById('sessionGroup').value = '';
+            document.getElementById('sessionTitle').value = '';
+            document.getElementById('sessionDate').value = '';
+            editingSessionId = null;
+            document.getElementById('sessionModal').style.display = 'flex';
+        }
+        
+        function showEditSessionModal(sessionId) {
+            document.getElementById('sessionModalTitle').textContent = 'تعديل الجلسة';
+            // In a real app, this would populate with session data
+            document.getElementById('sessionCourse').value = 'english';
+            document.getElementById('sessionGroup').value = 'group1';
+            document.getElementById('sessionTitle').value = 'الجلسة 1';
+            document.getElementById('sessionDate').value = '2026-01-15';
+            editingSessionId = sessionId;
+            document.getElementById('sessionModal').style.display = 'flex';
+        }
+        
+        function closeSessionModal() {
+            document.getElementById('sessionModal').style.display = 'none';
+        }
+        
+        function closeQRModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+        
+        function saveSession() {
+            const title = document.getElementById('sessionTitle').value;
+            const date = document.getElementById('sessionDate').value;
+            
+            if (!title || !date) {
+                alert('الرجاء إدخال عنوان الجلسة والتاريخ');
+                return;
+            }
+            
+            alert(editingSessionId ? 'تم تحديث الجلسة!' : 'تم إنشاء الجلسة!');
+            closeSessionModal();
+        }
+        
+        function showQRCode(sessionId) {
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+        
+        function deleteSession(sessionId) {
+            if (confirm('هل أنت متأكد من حذف هذه الجلسة؟')) {
+                alert('تم حذف الجلسة!');
+            }
+        }
+        
+        function filterSessions() {
+            // In a real app, this would filter the sessions based on selections
+            console.log('Filtering sessions...');
+        }
+        
+        // Highlight active nav item
+        const currentPath = window.location.pathname.split('/').pop();
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            if (item.getAttribute('href') === currentPath) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

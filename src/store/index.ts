@@ -27,9 +27,41 @@ export function loadState(): AppState {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
+      
+      // Initialize courses if not present
+      const courses = parsed.courses || initializeCourses()
+      
+      // Migrate groups from old format to new format
+      const migratedGroups = (parsed.groups || []).map((g: any) => ({
+        id: g.id,
+        courseId: g.courseId || courses[0]?.id || '',
+        name: g.name || g.nameEn || 'مجموعة',
+        instructorName: g.instructorName || '',
+        maxCapacity: g.maxCapacity || null,
+        createdAt: g.createdAt || new Date().toISOString(),
+      }))
+      
+      // Migrate students from old format (groupIds) to new format (courseId, groupId)
+      const migratedStudents = (parsed.students || []).map((s: any) => ({
+        id: s.id,
+        fullName: s.fullName,
+        phoneNumber: s.phoneNumber,
+        isNew: s.isNew ?? true,
+        certificateFeePaid: s.certificateFeePaid ?? false,
+        firstInstallmentPaid: s.firstInstallmentPaid ?? false,
+        secondInstallmentPaid: s.secondInstallmentPaid ?? false,
+        courseId: s.courseId !== undefined ? s.courseId : null,
+        groupId: s.groupId !== undefined ? s.groupId : (s.groupIds?.[0] || null),
+        createdAt: s.createdAt || new Date().toISOString(),
+      }))
+      
       return {
-        ...parsed,
         isAuthenticated: localStorage.getItem(AUTH_KEY) === 'true',
+        students: migratedStudents,
+        courses: courses,
+        groups: migratedGroups,
+        sessions: parsed.sessions || [],
+        attendance: parsed.attendance || [],
       }
     }
   } catch (e) {

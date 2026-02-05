@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحضور - أكاديمية إيدكون</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="attendance-header">
+            <h1>تسجيل الحضور</h1>
+        </header>
+
+        <main class="attendance-main">
+            <div id="attendanceForm" class="form-container">
+                <h2>الرجاء إدخال رقم هاتفك</h2>
+                <form id="phoneForm">
+                    <div class="form-group">
+                        <label for="studentPhone">رقم الهاتف:</label>
+                        <input type="tel" id="studentPhone" placeholder="أدخل رقم هاتفك" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">إرسال</button>
+                </form>
+            </div>
+
+            <div id="newStudentForm" class="form-container" style="display: none;">
+                <h2>تسجيل طالب جديد</h2>
+                <p>يبدو أنك غير مسجل في نظامنا. يرجى التسجيل أدناه:</p>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="newStudentName">الاسم الكامل:</label>
+                        <input type="text" id="newStudentName" placeholder="أدخل اسمك الكامل" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newStudentPhone">رقم الهاتف:</label>
+                        <input type="tel" id="newStudentPhone" placeholder="أدخل رقم هاتفك" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentGroup">اختر الكورسات:</label>
+                        <select multiple id="studentGroup" required>
+                            <option value="">اختر كورسات</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">تسجيل وحضور</button>
+                    <button type="button" id="backToPhoneBtn" class="btn btn-secondary">رجوع</button>
+                </form>
+            </div>
+
+            <div id="attendanceSuccess" class="success-container" style="display: none;">
+                <h2>مرحبًا، <span id="studentNameDisplay"></span>!</h2>
+                <p>تم تسجيل حضورك لهذه الجلسة.</p>
+                
+                <div class="attendance-summary">
+                    <h3>سجل حضورك</h3>
+                    <p>إجمالي الجلسات الحاضر فيها: <span id="attendedCount"></span></p>
+                    <div id="surpriseMessage"></div>
+                </div>
+                
+                <div class="support-section">
+                    <p>إذا كانت لديك أي مشكلة في تسجيل حضورك، يرجى التواصل مع الدعم:</p>
+                    <div class="support-buttons">
+                        <a href="https://wa.me/201029398592" target="_blank" class="btn btn-whatsapp">واتساب 01029398592</a>
+                        <a href="https://wa.me/201020830342" target="_blank" class="btn btn-whatsapp">واتساب 01020830342</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="invalidSession" class="error-container" style="display: none;">
+                <h2>جلسة غير صالحة</h2>
+                <p>رابط الجلسة الذي قمت بالوصول إليه غير صالح أو منتهي الصلاحية.</p>
+                <a href="./attendance.html" class="btn btn-primary">حاول مرة أخرى</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="./js/attendance.js"></script>
+</body>
+</html>
